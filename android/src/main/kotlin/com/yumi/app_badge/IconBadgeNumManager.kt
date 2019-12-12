@@ -2,7 +2,7 @@ package com.yumi.app_badge
 
 import android.app.Notification
 import android.content.Context
-import android.support.annotation.NonNull
+import androidx.annotation.NonNull
 
 /**
  * Created by pwy on 2019/4/22.
