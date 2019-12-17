@@ -61,8 +61,8 @@ class AppBadgePlugin(val appContext: Context) : MethodCallHandler {
     private fun sendIconNumNotification(count: Int) {
         try {
             val notificationManager: NotificationManager =
-                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            notificationManager?.cancelAll()
+                appContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.cancelAll()
         } catch (e: Exception) {
             e.printStackTrace()
         }
