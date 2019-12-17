@@ -14,7 +14,6 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 
-
 class AppBadgePlugin(val appContext: Context) : MethodCallHandler {
 
     companion object {
@@ -25,7 +24,10 @@ class AppBadgePlugin(val appContext: Context) : MethodCallHandler {
         }
     }
 
-    override fun onMethodCall(call: MethodCall, result: Result) {
+    override fun onMethodCall(
+        call: MethodCall,
+        result: Result
+    ) {
         when (call.method) {
             "getPlatformVersion" -> {
                 result.success("Android ${android.os.Build.VERSION.RELEASE}")
@@ -43,7 +45,10 @@ class AppBadgePlugin(val appContext: Context) : MethodCallHandler {
         IconBadgeNumManager()
     }
 
-    private fun setAppBadge(call: MethodCall, result: Result) {
+    private fun setAppBadge(
+        call: MethodCall,
+        result: Result
+    ) {
         val count = call.argument<Int>("count")
         if (count == null) {
             result.success(false)
@@ -54,26 +59,10 @@ class AppBadgePlugin(val appContext: Context) : MethodCallHandler {
     }
 
     private fun sendIconNumNotification(count: Int) {
-        val nm = appContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        var notificationChannelId = ""
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            val notificationChannel = createNotificationChannel()
-            nm.createNotificationChannel(notificationChannel)
-            notificationChannelId = notificationChannel.id
-        }
-        var notification: Notification?
         try {
-            notification = NotificationCompat.Builder(appContext, notificationChannelId)
-                .setSmallIcon(appContext.applicationInfo.icon)
-                .setWhen(System.currentTimeMillis())
-                .setContentTitle("title")
-                .setContentText("content num: $count")
-                .setTicker("ticker")
-                .setAutoCancel(true)
-                .setNumber(count)
-                .build()
-            notification = iconBadgeNumManager.setIconBadgeNum(appContext, notification, count)
-            nm.notify(32154, notification)
+            val notificationManager: NotificationManager =
+                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager?.cancelAll()
         } catch (e: Exception) {
             e.printStackTrace()
         }
